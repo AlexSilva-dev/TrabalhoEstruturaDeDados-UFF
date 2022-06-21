@@ -542,10 +542,9 @@ void isam_registra_callback_tam_reg_dados(T_ISAM *isam, int (*tam_arq_reg)(FILE 
 //um ponteiro para o tipo estruturado contendo os dados do registro
 //do arquivo de dados 
 void* isam_ler_dado_chave_no_interno(T_ISAM *isam, int chave_reg){
-void * funcionario = isam->criar_dado();
-    isam->ler_dado_pos(isam->arq_dados,funcionario,chave_reg);
-
-    return funcionario;
+ void *cslt = isam->criar_dado();
+ isam->ler_dado_pos(isam->arq_dados,cslt, chave_reg);
+ return cslt;
 
 }
 
@@ -566,32 +565,27 @@ TNo_ISAM *isam_buscar_no_folha(T_ISAM *isam, void *consulta){
 
 //Busca pelo dado no arquivo de dados que satisfaz a consulta
 void* isam_buscar(T_ISAM *isam, void *consulta){
-TNo_ISAM *no = isam_criar_no(isam,INTERNO);
-    isam_ler_no_pos(isam,no,isam->raiz);
-    //compara chaves pra pegar o indice , usa o indice pra fazer a chamada da função ler no interno pra pegar o cod e poder usar a comparar que compara void com void e ver qual o retorno
-    while (no->tipo != FOLHA){
-        int i = 0;
-        while ((i<no->n) && (isam->comparar(consulta,isam_ler_dado_chave_no_interno(isam,no->chaves[i]))>0)){
-            i++;
-            //isam->imprimir_dado(isam_ler_dado_chave_no_interno(isam, no->chaves[i])); //Pode apagar
-            
-        }
-        if((isam->comparar(consulta,isam_ler_dado_chave_no_interno(isam,no->chaves[i]))>=0) && (i < no->n)){
-            isam_ler_no_pos(isam,no,no->filhos[i+1]);
-        }
-        else{
-            isam_ler_no_pos(isam,no,no->filhos[i]);
-        }
+    TNo_ISAM* no_isam = isam_criar_no(isam,INTERNO);
+    isam_ler_no_pos(isam,no_isam,isam->raiz);
+    while (no_isam->tipo!=FOLHA){
+        int u = 0;
+        isam_ler_dado_chave_no_interno(isam,no_isam->chaves[u]);
+        while ((u<no_isam->n) && (isam->comparar(consulta,isam_ler_dado_chave_no_interno(isam,no_isam->chaves[u])))>0)u++;
+        if ((u<no_isam->n) && (isam->comparar(consulta,isam_ler_dado_chave_no_interno(isam,no_isam->chaves[u]))>=0))
+            isam_ler_no_pos(isam,no_isam,no_isam->filhos[u+1]);
+        else 
+            isam_ler_no_pos(isam,no_isam,no_isam->filhos[u]);
     }
-    isam_imprimir_no(isam,no);
-    for (int j = 0; j < no->t; j++){
-        if (isam->comparar(consulta,isam_ler_dado_chave_no_interno(isam,no->chaves[j]))==0){
-            return isam_ler_dado_chave_no_interno(isam,no->chaves[j]);
-        }  
+    isam_imprimir_no(isam,no_isam);
+    for(int aux=0;aux<no_isam->t;aux++) {
+        if (isam->comparar(isam_ler_dado_chave_no_interno(isam,no_isam->chaves[aux]),consulta) == 0 )
+        {
+            return isam_ler_dado_chave_no_interno(isam,no_isam->chaves[aux]);
+        }
+        
     }
     return NULL;
 }
-
 
 
 
