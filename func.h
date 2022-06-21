@@ -6,7 +6,7 @@
 
 typedef struct func{int cod;
                     char nome[50];
-                    float salario;}TFunc;
+                    double salario;}TFunc;
 
 typedef struct pag_func{int tam_pag;
                         TFunc *regs;} TPag_Func;

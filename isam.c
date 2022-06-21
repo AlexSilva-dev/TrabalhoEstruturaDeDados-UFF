@@ -4,7 +4,6 @@
 
 #include"TF.h"
 #include"isam.h"
-#include"func.h"
 
 #ifndef INT_MAX
 #define INFINITO __INT_MAX__
@@ -543,15 +542,7 @@ void isam_registra_callback_tam_reg_dados(T_ISAM *isam, int (*tam_arq_reg)(FILE 
 //um ponteiro para o tipo estruturado contendo os dados do registro
 //do arquivo de dados 
 void* isam_ler_dado_chave_no_interno(T_ISAM *isam, int chave_reg){
-
-    TFunc *funcio = (TFunc*)malloc(sizeof(TFunc));
-    func_ler_pos(isam->arq_dados, funcio, chave_reg);
-
-    //printf("comparações:");
-    //func_imprimir(funcio);  //TESTE para ver o dado q vai ser retornado
-    return funcio;
-
-
+ //A implementar
 }
 
 //Procura na folha atual pelo dado no arquivo de dados 
@@ -564,62 +555,13 @@ void *isam_ler_dado_chave_no_folha(T_ISAM *isam, TNo_ISAM *no_folha, void *consu
 
 //Obs.: Funcao auxiliar usada no gabarito para melhor modularizacao - nao e obrigatorio implementa-la
 TNo_ISAM *isam_buscar_no_folha(T_ISAM *isam, void *consulta){
-   
+//A implementar
+
 }
 
 
 //Busca pelo dado no arquivo de dados que satisfaz a consulta
 void* isam_buscar(T_ISAM *isam, void *consulta){
-
-    TFunc *consul = (TFunc*)consulta;
-    func_imprimir(consul);  //TESTE para ver a entrada
-    TFunc *fAux = (TFunc*)malloc(sizeof(TFunc));
-    
-    TNo_ISAM *no = (TNo_ISAM*) malloc(sizeof(TNo_ISAM));
-    int indNoF = isam->raiz;
-    isam_ler_no_pos(isam, no,indNoF);
-    //fprintf(isam->arq_log, "\n\nTESTES Meu\n\n");
-    //isam_imprimir_no(isam, no);   // TESTE para imprimir o nó
-    
-     while(no->tipo == INTERNO){
-        isam_ler_no_pos(isam, no,indNoF);   //cria nó no indice indicado
-        isam_imprimir_no(isam,no);  //TESTE para imprimir os nós
-
-        for(int i = 0; i<(no->n); i++){
-
-            fAux = isam_ler_dado_chave_no_interno(isam, no->chaves[i]);
-
-            if( (fAux->cod) > (consul->cod) ){    //verifica em qual filho ta a chave q procuramos
-                indNoF = no->filhos[i];     // e pegamos o filho correspondente e armazenamos o indice
-                break;
-            }else if(i == ((no->n)-1)){
-                indNoF = no->filhos[i+1];
-            }
-            printf("%d", i);
-        }
-    }
-
-    TFunc *resul = (TFunc*)malloc(sizeof(TFunc));
-    int indDado = NULL;
-    //isam_ler_no_pos(isam, no, indNoF);    //duvidas se devo colocar no cod
-    for(int i = 0; i<(no->n); i++){
-
-        fAux = isam_ler_dado_chave_no_interno(isam, no->chaves[i]);
-        if(fAux->cod == consul->cod){
-            indDado = no->filhos[i];
-            break;
-        }
-    }
-
-    if(indDado){
-        resul = isam_ler_dado_chave_no_interno(isam, indDado);
-        func_imprimir(resul);
-    }
-    free(fAux);
-    free(no);
-    free(consul);
-    return resul;
-
 
 //A implementar
 }

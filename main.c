@@ -356,10 +356,10 @@ void teste_consulta_simples_por_codigo(T_ISAM *isam_cod, T_ISAM *isam_nome){
 
 
 
-    consulta_por_cod(isam_cod,1000);
-    //consulta_por_cod(isam_cod,1333);
-    consulta_por_cod(isam_cod,1515);
-    consulta_por_cod(isam_cod,3684);
+    consulta_por_cod(isam_cod,1144);
+    consulta_por_cod(isam_cod,1122);
+    consulta_por_cod(isam_cod,1377);
+    consulta_por_cod(isam_cod,1511);
     
 
 }
@@ -541,33 +541,14 @@ int main(){
     isam_registra_callback_tam_reg_dados(isam_nome, func_tam_reg);
     isam_criar_paginas(isam_nome);
     
-    //Meus testes
-    
-    //isam_ler_dado_chave_no_interno(isam_cod, 49);
-    /*
-    int codF = 3684;
-    void *c = consulta_cod(&codF);
-    isam_buscar(isam_cod, c);
-
-    //
-    codF = 1001;
-    c = consulta_cod(&codF);
-    isam_buscar(isam_cod, c);
-    
-    codF = 2879;
-    c = consulta_cod(&codF);
-    isam_buscar(isam_cod, c);
-    */
 
     //menu(isam_cod,isam_nome);
     
-
-    //testes(isam_cod,isam_nome);        
+    testes(isam_cod,isam_nome);        
 
     isam_finalizar(isam_cod);
     isam_finalizar(isam_nome);
     fclose(arq_log);
-
 
     return 0;
 }
