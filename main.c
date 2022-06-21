@@ -479,9 +479,18 @@ void testes(T_ISAM *isam_cod, T_ISAM *isam_nome){
     teste_insercao_overflow(isam_cod,isam_nome);
     teste_consulta_overflow_por_codigo(isam_cod,isam_nome);
     teste_consulta_overflow_por_nome(isam_cod,isam_nome);
+    TFunc *dado = isam_cod->criar_dado();
+    dado->cod = 1144;
+
+
+
+    TFunc * found = isam_buscar(isam_cod,dado);
+    
+    printf("Found = %s", found->nome);
 }
 
 int main(){
+
 
 
     printf(" _______________________________________________________________________________________________________________________________________\n");
@@ -542,9 +551,9 @@ int main(){
     isam_criar_paginas(isam_nome);
     
 
-    //menu(isam_cod,isam_nome);
+    menu(isam_cod,isam_nome);
     
-    testes(isam_cod,isam_nome);        
+    //testes(isam_cod,isam_nome);        
 
     isam_finalizar(isam_cod);
     isam_finalizar(isam_nome);

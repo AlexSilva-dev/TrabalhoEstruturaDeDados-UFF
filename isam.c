@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-
+#include "func.h"
 #include"TF.h"
 #include"isam.h"
 
@@ -542,7 +542,11 @@ void isam_registra_callback_tam_reg_dados(T_ISAM *isam, int (*tam_arq_reg)(FILE 
 //um ponteiro para o tipo estruturado contendo os dados do registro
 //do arquivo de dados 
 void* isam_ler_dado_chave_no_interno(T_ISAM *isam, int chave_reg){
- //A implementar
+    void * funcionario = func_criar();
+    isam->ler_dado_pos(isam->arq_dados,funcionario,chave_reg);
+
+    return funcionario;
+
 }
 
 //Procura na folha atual pelo dado no arquivo de dados 
@@ -562,8 +566,28 @@ TNo_ISAM *isam_buscar_no_folha(T_ISAM *isam, void *consulta){
 
 //Busca pelo dado no arquivo de dados que satisfaz a consulta
 void* isam_buscar(T_ISAM *isam, void *consulta){
-
-//A implementar
+TNo_ISAM *no = isam_criar_no(isam,INTERNO);
+    isam_ler_no_pos(isam,no,isam->raiz);
+    //compara chaves pra pegar o indice , usa o indice pra fazer a chamada da função ler no interno pra pegar o cod e poder usar a comparar que compara void com void e ver qual o retorno
+    while (no->tipo != FOLHA){
+        int i = 0;
+        while (i<no->n && isam->comparar(consulta,isam_ler_dado_chave_no_interno(isam,no->chaves[i]))>0){
+            i++;
+        }
+        if(isam->comparar(consulta,isam_ler_dado_chave_no_interno(isam,no->chaves[i]))>=0){
+            isam_ler_no_pos(isam,no,no->filhos[i+1]);
+        }
+        else{
+            isam_ler_no_pos(isam,no,no->filhos[i]);
+        }
+    }
+    isam_imprimir_no(isam,no);
+    for (int j = 0; j < no->t; j++){
+        if (isam->comparar(consulta,isam_ler_dado_chave_no_interno(isam,no->chaves[j]))==0){
+            return isam_ler_dado_chave_no_interno(isam,no->chaves[j]);
+        }  
+    }
+    return NULL;
 }
 
 
