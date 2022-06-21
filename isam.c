@@ -571,10 +571,11 @@ TNo_ISAM *no = isam_criar_no(isam,INTERNO);
     //compara chaves pra pegar o indice , usa o indice pra fazer a chamada da função ler no interno pra pegar o cod e poder usar a comparar que compara void com void e ver qual o retorno
     while (no->tipo != FOLHA){
         int i = 0;
-        while (i<no->n && isam->comparar(consulta,isam_ler_dado_chave_no_interno(isam,no->chaves[i]))>0){
+        while ((i<no->n) && (isam->comparar(consulta,isam_ler_dado_chave_no_interno(isam,no->chaves[i]))>0)){
             i++;
+            isam->imprimir_dado(isam_ler_dado_chave_no_interno(isam, no->chaves[i]));
         }
-        if(isam->comparar(consulta,isam_ler_dado_chave_no_interno(isam,no->chaves[i]))>=0){
+        if((isam->comparar(consulta,isam_ler_dado_chave_no_interno(isam,no->chaves[i]))==0) && (i < no->n)){
             isam_ler_no_pos(isam,no,no->filhos[i+1]);
         }
         else{

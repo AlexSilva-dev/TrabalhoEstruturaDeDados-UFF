@@ -549,7 +549,6 @@ int main(){
     isam_registra_callback_tam_arq_dados(isam_nome, func_tam_arq);
     isam_registra_callback_tam_reg_dados(isam_nome, func_tam_reg);
     isam_criar_paginas(isam_nome);
-    
 
     menu(isam_cod,isam_nome);
     
