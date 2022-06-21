@@ -1,0 +1,37 @@
+void* isam_ler_dado_chave_no_interno(T_ISAM *isam, int chave_reg){
+    TNo_ISAM *no = (TNo_ISAM*) malloc(sizeof(TNo_ISAM));
+    int indNoF = isam->raiz;
+    isam_ler_no_pos(isam, no,indNoF);
+
+    //isam_imprimir_no(isam, no);  //teste para imprimir nó raiz
+    
+    while(no->tipo == INTERNO){
+        isam_ler_no_pos(isam, no,indNoF);   //cria nó no indice indicado
+        isam_imprimir_no(isam,no);  //TESTE para imprimir os nós
+        
+
+        for(int i = 0; i<(no->n); i++){
+            if(no->chaves[i]>chave_reg){    //verifica em qual filho ta a chave q procuramos
+                indNoF = no->filhos[i];     // e pegamos o filho correspondente e armazenamos o indice
+                break;
+            }else if(i == ((no->n)-1)){
+                indNoF = no->filhos[i+1];
+            }
+        }
+    }
+    int indDado = -1;
+    for(int i = 0; i<(no->n); i++){          //trata o nós folhas e pega o indice correspondente no arq de dados
+            if(no->chaves[i] == chave_reg){  // ''
+                indDado = no->filhos[i];    //  ''
+                break;                      //  ''
+            }
+        }                                   //  ''
+    TFunc *funcio = (TFunc*)malloc(sizeof(TFunc));
+    func_ler_pos(isam->arq_dados, funcio, indDado);
+
+
+    func_imprimir(funcio);  //TESTE para ver o dado q vai ser retornado
+    return funcio;
+
+
+}
