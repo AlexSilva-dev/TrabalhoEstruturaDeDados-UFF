@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include "func.h"
+
 #include"TF.h"
 #include"isam.h"
 
@@ -542,7 +542,7 @@ void isam_registra_callback_tam_reg_dados(T_ISAM *isam, int (*tam_arq_reg)(FILE 
 //um ponteiro para o tipo estruturado contendo os dados do registro
 //do arquivo de dados 
 void* isam_ler_dado_chave_no_interno(T_ISAM *isam, int chave_reg){
-    void * funcionario = func_criar();
+void * funcionario = isam->criar_dado();
     isam->ler_dado_pos(isam->arq_dados,funcionario,chave_reg);
 
     return funcionario;
@@ -573,9 +573,10 @@ TNo_ISAM *no = isam_criar_no(isam,INTERNO);
         int i = 0;
         while ((i<no->n) && (isam->comparar(consulta,isam_ler_dado_chave_no_interno(isam,no->chaves[i]))>0)){
             i++;
-            isam->imprimir_dado(isam_ler_dado_chave_no_interno(isam, no->chaves[i]));
+            //isam->imprimir_dado(isam_ler_dado_chave_no_interno(isam, no->chaves[i])); //Pode apagar
+            
         }
-        if((isam->comparar(consulta,isam_ler_dado_chave_no_interno(isam,no->chaves[i]))==0) && (i < no->n)){
+        if((isam->comparar(consulta,isam_ler_dado_chave_no_interno(isam,no->chaves[i]))>=0) && (i < no->n)){
             isam_ler_no_pos(isam,no,no->filhos[i+1]);
         }
         else{
