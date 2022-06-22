@@ -567,10 +567,12 @@ TNo_ISAM *isam_buscar_no_folha(T_ISAM *isam, void *consulta){
 void* isam_buscar(T_ISAM *isam, void *consulta){
     TNo_ISAM* no_isam = isam_criar_no(isam,INTERNO);
     isam_ler_no_pos(isam,no_isam,isam->raiz);
-    while (no_isam->tipo!=FOLHA){
+    while (no_isam->tipo==INTERNO){
         int u = 0;
         isam_ler_dado_chave_no_interno(isam,no_isam->chaves[u]);
-        while ((u<no_isam->n) && (isam->comparar(consulta,isam_ler_dado_chave_no_interno(isam,no_isam->chaves[u])))>0)u++;
+        while ((u<no_isam->n) && (isam->comparar(consulta,isam_ler_dado_chave_no_interno(isam,no_isam->chaves[u]))>0)){
+            u++;
+        }
         if ((u<no_isam->n) && (isam->comparar(consulta,isam_ler_dado_chave_no_interno(isam,no_isam->chaves[u]))>=0))
             isam_ler_no_pos(isam,no_isam,no_isam->filhos[u+1]);
         else 
@@ -591,7 +593,68 @@ void* isam_buscar(T_ISAM *isam, void *consulta){
 
 void isam_insere(T_ISAM *isam,void *dado){
 
-//A implementar                
+
+/*
+
+    //busca para verificar se o dado já ta inserido
+    if( (isam_buscar(isam, dado)) != NULL ){
+        return NULL;
+    }
+    //percorer a arv nos nós interno como se fosse busca
+    TNo_ISAM* no_isam = isam_criar_no(isam,INTERNO);
+    isam_ler_no_pos(isam,no_isam,isam->raiz);
+    while (no_isam->tipo==INTERNO){
+        int u = 0;
+        isam_ler_dado_chave_no_interno(isam,no_isam->chaves[u]);
+        while ((u<no_isam->n) && (isam->comparar(dado,isam_ler_dado_chave_no_interno(isam,no_isam->chaves[u]))>0)){ //possibilidade de erro por conta do dado está com cod e nome para comprar
+            u++;
+        }
+        if ((u<no_isam->n) && (isam->comparar(dado,isam_ler_dado_chave_no_interno(isam,no_isam->chaves[u]))>=0)){   // ''
+            isam_ler_no_pos(isam,no_isam,no_isam->filhos[u+1]);
+        }
+        else {
+            isam_ler_no_pos(isam,no_isam,no_isam->filhos[u]);
+        }
+
+
+    //e quando chegar no nó filho andar pelas chaves verificando se a chave que vai inserir é menor q a chave do nó
+    int chav, nul = -1; 
+    for(int i = 0; i<no_isam; i++){
+        if( (isam->comparar(dado,isam_ler_dado_chave_no_interno(isam,no_isam->chaves[i]))>0) && (chav==-1) ){  // pode ser que a comparação do nó tem que ser < 0
+            chav = i;
+        }
+        if(!no_isam->chaves[i]){
+            nul = i;
+        }
+    }
+    //  se tiver uma chave no nó maior que a chave inserida; verifica se tem chave de valor nullo no nó, se não tiver; criar uma pag de overflow e insere....
+
+
+    //  se tiver espaço só deslocar a chave do nó para o espaço seguinte
+    if( (chav == -1) && (nul != -1)){
+
+
+    } else if( (chav != -1) && (nul != -1) ){
+        while(no_isam->chaves[chav] != NULL){
+            int ind =0;
+            while( (no_isam->chaves[ind+1] != NULL) ){
+                ind++;
+            }
+            no_isam->chaves[ind+1] = no_isam->chaves[ind];
+            no_isam->chaves[ind] = NULL;
+        }
+    }
+*/
+    //aloca a o indice da chave que vai inserir no indice da maior chave do nó 
+    //no_isam->chaves[chav] = isam->tam_arq_dados + 1;
+    printf("\n\n%d\n\n", isam->tam_arq_dados);
+    isam->salvar_dado_pos(isam->arq_dados, dado, 50);
+    
+    
+    
+    //e coloca o filho corespondente com o indice do dado e adiciona o dado no arq_dados
+
+
 }
 
 

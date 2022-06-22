@@ -1,0 +1,9 @@
+while (( (a<no_isam->n) && (isam->comparar(dado,isam_ler_dado_chave_no_interno(isam,no_isam->chaves[a]))>0) ) || (no_isam->chaves[a] != NULL)){ //possibilidade de erro por conta do dado está com cod e nome para comprar
+            a++;
+        }
+        if ((a<no_isam->n) && (isam->comparar(dado,isam_ler_dado_chave_no_interno(isam,no_isam->chaves[a]))>=0)){
+            
+        }
+        else {
+            
+        }
