@@ -4,6 +4,7 @@
 
 #include"TF.h"
 #include"isam.h"
+#include"func.h"
 
 #ifndef INT_MAX
 #define INFINITO __INT_MAX__
@@ -569,6 +570,27 @@ void* isam_buscar(T_ISAM *isam, void *consulta){
     isam_ler_no_pos(isam,no_isam,isam->raiz);
     while (no_isam->tipo==INTERNO){
         int u = 0;
+        //print ~~~
+
+        printf("|tipo:I|");
+        printf("|n=%d|",no_isam->n);
+            for (int i=0;i<no_isam->t-1;i++){
+                if (no_isam->chaves[i] != INFINITO){
+                    printf("|c_(%3d)=%3d|",i,no_isam->chaves[i]);
+                }
+                else{
+                    printf("|c_(%3d)=INF|",i);
+                }
+            } 
+            printf(" ");
+
+            for (int i=0;i<no_isam->t;i++){
+                printf("|f_(%3d)=%3d|",i,no_isam->filhos[i]);
+                
+            }
+            printf("\n");
+        
+        //~~~~~~
         isam_ler_dado_chave_no_interno(isam,no_isam->chaves[u]);
         while ((u<no_isam->n) && (isam->comparar(consulta,isam_ler_dado_chave_no_interno(isam,no_isam->chaves[u]))>0)){
             u++;
@@ -578,7 +600,30 @@ void* isam_buscar(T_ISAM *isam, void *consulta){
         else 
             isam_ler_no_pos(isam,no_isam,no_isam->filhos[u]);
     }
-    isam_imprimir_no(isam,no_isam);
+    //isam_imprimir_no(isam,no_isam);
+            //print ~~~
+
+        printf("|tipo:F|");
+        printf("|n=%d|",no_isam->n);
+            for (int i=0;i<no_isam->t-1;i++){
+                if (no_isam->chaves[i] != INFINITO){
+                    printf("|c_(%3d)=%3d|",i,no_isam->chaves[i]);
+                }
+                else{
+                    printf("|c_(%3d)=INF|",i);
+                }
+            } 
+            printf(" ");
+
+            for (int i=0;i<no_isam->t;i++){
+                printf("|f_(%3d)=%3d|",i,no_isam->filhos[i]);
+                
+            }
+            printf("|p=%d|",no_isam->prox);
+            printf("\n");
+        
+        //~~~~~~
+
     for(int aux=0;aux<no_isam->t;aux++) {
         if (isam->comparar(isam_ler_dado_chave_no_interno(isam,no_isam->chaves[aux]),consulta) == 0 )
         {
@@ -594,7 +639,6 @@ void* isam_buscar(T_ISAM *isam, void *consulta){
 void isam_insere(T_ISAM *isam,void *dado){
 
 
-/*
 
     //busca para verificar se o dado já ta inserido
     if( (isam_buscar(isam, dado)) != NULL ){
@@ -615,7 +659,7 @@ void isam_insere(T_ISAM *isam,void *dado){
         else {
             isam_ler_no_pos(isam,no_isam,no_isam->filhos[u]);
         }
-
+    }
 
     //e quando chegar no nó filho andar pelas chaves verificando se a chave que vai inserir é menor q a chave do nó
     int chav, nul = -1; 
@@ -644,12 +688,15 @@ void isam_insere(T_ISAM *isam,void *dado){
             no_isam->chaves[ind] = NULL;
         }
     }
-*/
+
     //aloca a o indice da chave que vai inserir no indice da maior chave do nó 
     //no_isam->chaves[chav] = isam->tam_arq_dados + 1;
-    printf("\n\n%d\n\n", isam->tam_arq_dados);
-    isam->salvar_dado_pos(isam->arq_dados, dado, 50);
-    
+    //isam->salvar_dado_pos(isam->arq_dados, dado, 50);
+    TFunc *d = (TFunc*)malloc(sizeof(TFunc));
+    d = (TFunc*)dado;
+    func_salvar(isam->arq_dados, d);
+    //func_salvar_pos(isam->arq_dados, d, 51);
+    //fflush(isam->arq_dados);
     
     
     //e coloca o filho corespondente com o indice do dado e adiciona o dado no arq_dados
