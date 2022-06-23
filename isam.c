@@ -639,7 +639,7 @@ void* isam_buscar(T_ISAM *isam, void *consulta){
 void isam_insere(T_ISAM *isam,void *dado){
 
 
-
+/*
     //busca para verificar se o dado já ta inserido
     if( (isam_buscar(isam, dado)) != NULL ){
         return NULL;
@@ -688,7 +688,7 @@ void isam_insere(T_ISAM *isam,void *dado){
             no_isam->chaves[ind] = NULL;
         }
     }
-
+*/
     //aloca a o indice da chave que vai inserir no indice da maior chave do nó 
     //no_isam->chaves[chav] = isam->tam_arq_dados + 1;
     //isam->salvar_dado_pos(isam->arq_dados, dado, 50);
