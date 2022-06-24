@@ -5,7 +5,7 @@
 #include <math.h>
 #include"func.h"
 
-
+#define DEPURACAO
 #define MAX_NOMES 96
 #define MAX_SALARIOS 20
 
@@ -178,11 +178,12 @@ void func_imprimir_arq_console(FILE *f) {
     TFunc *func = func_criar();
     //le o arquivo e coloca no vetor
     rewind(f); //posiciona cursor no inicio do arquivo
-    func_ler(f,func);
+   // func_ler(f,func);
     int i = 0;
     while (!feof(f)) {
-        func_imprimir(func);
         func_ler(f,func);
+        func_imprimir(func);
+        //func_ler(f,func);
     }
     func = func_liberar(func);
 }
@@ -290,7 +291,7 @@ void func_insertion_sort_disco(FILE *arq, int tam, int (*comparar)(const void *a
             #endif
         }
         //salva registro j na posição i
-        func_salvar(arq, fj);
+        //func_salvar(arq, fj);
         func_salvar_pos(arq,fj,i+1);
     }
     //descarrega o buffer para ter certeza que dados foram gravados

@@ -691,11 +691,14 @@ void isam_insere(T_ISAM *isam,void *dado){
 */
     //aloca a o indice da chave que vai inserir no indice da maior chave do nó 
     //no_isam->chaves[chav] = isam->tam_arq_dados + 1;
-    //isam->salvar_dado_pos(isam->arq_dados, dado, 50);
-    TFunc *d = (TFunc*)malloc(sizeof(TFunc));
-    d = (TFunc*)dado;
-    func_salvar(isam->arq_dados, d);
-    //func_salvar_pos(isam->arq_dados, d, 51);
+    
+    //TFunc *d = (TFunc*)malloc(sizeof(TFunc));
+    //d = (TFunc*)dado;
+    isam->tam_arq_dados++;
+    //func_salvar(isam->arq_dados, d);
+    isam->salvar_dado_pos(isam->arq_dados, dado, isam->tam_arq_dados);
+    //func_salvar_pos(isam->arq_dados, d, isam->tam_arq_dados);
+
     //fflush(isam->arq_dados);
     
     

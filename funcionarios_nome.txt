@@ -1,8 +1,5 @@
  3008                               Alice Rangel Vicente  8500.00f
  2806                              Andre Vicente Esteves  2500.00f
- 2536                                        Bruno Ebert  2500.00f
- 3008                               Alice Rangel Vicente  8500.00f
- 2806                              Andre Vicente Esteves  2500.00f
  3261                                    Beatriz Pacheco  4000.00f
  2536                                        Bruno Ebert  2500.00f
  3163                            Dolores Teles Bernardes  6500.00f
@@ -16,16 +13,19 @@
  2933                              Henrique Zahn Ullmann 13000.00f
  1633                                      Irene Quercia  8500.00f
  2194                                        Irma Gentil 10000.00f
+ 1000                             Jessica Souza Venancio 15000.00f
  2142                              Julia Encarnacao Cruz  8000.00f
  3373                                     Kamila Andrade 15000.00f
  2035                                       Kamila Oliva  8500.00f
  1340                                     Kendra Benitez  2000.00f
  2114                                   Kleber Fernandes  5000.00f
  2879                                     Kleber Quercia  8000.00f
+ 1083                                Marcos Xavi Pacheco  5500.00f
  1210                                 Maria Leite Gentil  8500.00f
  3684                              Nando Oliveira Gentil  5500.00f
  3228                           Ofelia Fernandes Holanda  4000.00f
  3543                                   Ofelia Rodrigues  8500.00f
+ 1155                                       Olga Antunes  3000.00f
  3339                                        Otacilio Xu  6500.00f
  1515                                       Perla Macedo  7000.00f
  1333                                        Perla Veiga  3500.00f
