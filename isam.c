@@ -639,7 +639,7 @@ void* isam_buscar(T_ISAM *isam, void *consulta){
 void isam_insere(T_ISAM *isam,void *dado){
 
 
-/*
+
     //busca para verificar se o dado já ta inserido
     if( (isam_buscar(isam, dado)) != NULL ){
         return NULL;
@@ -688,21 +688,21 @@ void isam_insere(T_ISAM *isam,void *dado){
             no_isam->chaves[ind] = NULL;
         }
     }
-*/
+
     //aloca a o indice da chave que vai inserir no indice da maior chave do nó 
-    //no_isam->chaves[chav] = isam->tam_arq_dados + 1;
-    
+    //e coloca o filho corespondente com o indice do dado e adiciona o dado no arq_dados
+    no_isam->chaves[chav] = isam->tam_arq_dados + 1;
+    isam->tam_arq_dados++;
+    isam->salvar_dado_pos(isam->arq_dados, dado, isam->tam_arq_dados);
+
+//testes para salvar o dado no arq de dados{
     //TFunc *d = (TFunc*)malloc(sizeof(TFunc));
     //d = (TFunc*)dado;
-    isam->tam_arq_dados++;
     //func_salvar(isam->arq_dados, d);
-    isam->salvar_dado_pos(isam->arq_dados, dado, isam->tam_arq_dados);
     //func_salvar_pos(isam->arq_dados, d, isam->tam_arq_dados);
-
     //fflush(isam->arq_dados);
+//}
     
-    
-    //e coloca o filho corespondente com o indice do dado e adiciona o dado no arq_dados
 
 
 }
