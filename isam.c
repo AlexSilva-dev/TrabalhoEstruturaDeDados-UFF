@@ -639,14 +639,16 @@ void* isam_buscar(T_ISAM *isam, void *consulta){
 void isam_insere(T_ISAM *isam,void *dado){
 
 
-
+printf("koal");
     //busca para verificar se o dado já ta inserido
     if( (isam_buscar(isam, dado)) != NULL ){
+        printf("\ntenso");
         return NULL;
     }
     //percorer a arv nos nós interno como se fosse busca
     TNo_ISAM* no_isam = isam_criar_no(isam,INTERNO);
     isam_ler_no_pos(isam,no_isam,isam->raiz);
+    printf("\nola");
     while (no_isam->tipo==INTERNO){
         int u = 0;
         isam_ler_dado_chave_no_interno(isam,no_isam->chaves[u]);
@@ -660,10 +662,12 @@ void isam_insere(T_ISAM *isam,void *dado){
             isam_ler_no_pos(isam,no_isam,no_isam->filhos[u]);
         }
     }
+    printf("\n\nola1\n\n");
+    
 
     //e quando chegar no nó filho andar pelas chaves verificando se a chave que vai inserir é menor q a chave do nó
     int chav, nul = -1; 
-    for(int i = 0; i<no_isam; i++){
+    for(int i = 0; i<no_isam->t-1; i++){
         if( (isam->comparar(dado,isam_ler_dado_chave_no_interno(isam,no_isam->chaves[i]))>0) && (chav==-1) ){  // pode ser que a comparação do nó tem que ser < 0
             chav = i;
         }
@@ -671,14 +675,20 @@ void isam_insere(T_ISAM *isam,void *dado){
             nul = i;
         }
     }
+
+    printf("\nOla2\n"); //
     //  se tiver uma chave no nó maior que a chave inserida; verifica se tem chave de valor nullo no nó, se não tiver; criar uma pag de overflow e insere....
-
-
     //  se tiver espaço só deslocar a chave do nó para o espaço seguinte
-    if( (chav == -1) && (nul != -1)){
+    if( (chav == -1) && (nul != -1)){   // caso que não tem chave maior e tem espaço para colocar o dado no nó
+
+    no_isam->chaves[nul] = isam->tam_arq_dados + 1;
+    isam_salvar_no_pos(isam, no_isam, isam_pos_arq_ind(isam));  
+    isam->tam_arq_dados++;
+    isam->salvar_dado_pos(isam->arq_dados, dado, isam->tam_arq_dados);
 
 
-    } else if( (chav != -1) && (nul != -1) ){
+    } else if( (chav != -1) && (nul != -1) ){   // caso que tem uma chave maior e precisa deslocar as chaves existentes do nó
+
         while(no_isam->chaves[chav] != NULL){
             int ind =0;
             while( (no_isam->chaves[ind+1] != NULL) ){
@@ -687,14 +697,43 @@ void isam_insere(T_ISAM *isam,void *dado){
             no_isam->chaves[ind+1] = no_isam->chaves[ind];
             no_isam->chaves[ind] = NULL;
         }
-    }
-
-    //aloca a o indice da chave que vai inserir no indice da maior chave do nó 
-    //e coloca o filho corespondente com o indice do dado e adiciona o dado no arq_dados
+    //salvando dados no arq
     no_isam->chaves[chav] = isam->tam_arq_dados + 1;
+    isam_salvar_no_pos(isam, no_isam, isam_pos_arq_ind(isam));
     isam->tam_arq_dados++;
     isam->salvar_dado_pos(isam->arq_dados, dado, isam->tam_arq_dados);
 
+    } else if(nul == -1){   //caso de overflow
+
+        if(no_isam->filhos[no_isam->t] =! NULL){    // Se tiver nó de overflow; entrar no nó overflow e colocar o dado na primeira chave vazia
+
+
+            isam_ler_no_pos(isam, no_isam, no_isam->filhos[no_isam->t]);
+            int passaChav = 0;
+            if( ( (no_isam->t - 1) - no_isam->n) != 0){
+
+                while( (no_isam->chaves[passaChav] != NULL) && (passaChav < (no_isam->t-1)) ){
+                    passaChav++;
+                }
+                //salvando dados no arq dados
+                no_isam->chaves[passaChav] = isam->tam_arq_dados + 1;
+                isam_salvar_no_pos(isam, no_isam, isam_pos_arq_ind(isam));
+                isam->tam_arq_dados++;
+                isam->salvar_dado_pos(isam->arq_dados, dado, isam->tam_arq_dados);
+
+            }
+
+
+        }else if(no_isam->filhos[no_isam->t] == NULL){  //se não tiver; criar nó de overflow e colocar o dado dentro desse nó
+
+        }
+    }
+    printf("\nola3\n");
+
+  
+
+    //aloca a o indice da chave que vai inserir no indice da maior chave do nó 
+    //e coloca o filho corespondente com o indice do dado e adiciona o dado no arq_dados
 //testes para salvar o dado no arq de dados{
     //TFunc *d = (TFunc*)malloc(sizeof(TFunc));
     //d = (TFunc*)dado;

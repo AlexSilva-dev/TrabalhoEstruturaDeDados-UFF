@@ -107,7 +107,7 @@ void menu_consulta_por_codigo(T_ISAM *isam){
             continua = 0;
         }
 
-    }while (continua);
+    }while (continua != 0);
 
 }
 
@@ -141,7 +141,7 @@ void menu_consulta_por_nome(T_ISAM *isam){
         }
         fflush(stdin);
 
-    }while (continua);
+    }while (continua != 1);
 
 }
 
@@ -199,7 +199,7 @@ void menu(T_ISAM * isam_cod,T_ISAM *isam_nome){
             case 'x': continua = 0;
         }
         
-    }while (continua);
+    }while (continua != 0);
 }
 
 /*-----------------------------------------------------------------------
