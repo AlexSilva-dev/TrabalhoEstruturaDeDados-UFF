@@ -549,7 +549,7 @@ int main(){
     isam_registra_callback_tam_arq_dados(isam_nome, func_tam_arq);
     isam_registra_callback_tam_reg_dados(isam_nome, func_tam_reg);
     isam_criar_paginas(isam_nome);
-    // Testes
+    /*
     TFunc *t1 = func_criar();
     func_set(t1,1088, "alex", 1000);
     isam_insere(isam_cod, t1);
@@ -563,6 +563,7 @@ int main(){
     printf("\n\n");
     isam_buscar(isam_cod, t1);
 
+*/
     //
     menu(isam_cod,isam_nome);
     

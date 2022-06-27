@@ -661,7 +661,6 @@ void* isam_buscar(T_ISAM *isam, void *consulta){
 }
 
 
-
 void isam_insere(T_ISAM *isam,void *dado){
 
 
@@ -676,10 +675,10 @@ void isam_insere(T_ISAM *isam,void *dado){
     while (no_isam->tipo==INTERNO){
         int u = 0;
         isam_ler_dado_chave_no_interno(isam,no_isam->chaves[u]);
-        while ((u<no_isam->n) && (isam->comparar(dado,isam_ler_dado_chave_no_interno(isam,no_isam->chaves[u]))>0)){ //possibilidade de erro por conta do dado está com cod e nome para comprar
+        while ((u<no_isam->n) && (comparar_cod(dado,isam_ler_dado_chave_no_interno(isam,no_isam->chaves[u]))>0)){ //possibilidade de erro por conta do dado está com cod e nome para comprar
             u++;
         }
-        if ((u<no_isam->n) && (isam->comparar(dado,isam_ler_dado_chave_no_interno(isam,no_isam->chaves[u]))>=0)){   // ''
+        if ((u<no_isam->n) && (comparar_cod(dado,isam_ler_dado_chave_no_interno(isam,no_isam->chaves[u]))>=0)){   // ''
             isam_ler_no_pos(isam,no_isam,no_isam->filhos[u+1]);
             posNo = no_isam->filhos[u+1];
         }
@@ -701,23 +700,20 @@ void isam_insere(T_ISAM *isam,void *dado){
             nul = i;
         }
     }
-    printf("\n\n%d\n%d\n\n", chav, nul);
+
+    printf("\nNó antes de salvar:\n");
     impriFilho(no_isam);
-    //impriFilho(no_isam); //##########
+    //printf("\n%d\n", posNo);
     //  se tiver uma chave no nó maior que a chave inserida; verifica se tem chave de valor nullo no nó, se não tiver; criar uma pag de overflow e insere....
     //  se tiver espaço só deslocar a chave do nó para o espaço seguinte
 
     if( (chav == -1) && (nul != -1)){   // caso que não tem chave maior e tem espaço para colocar o dado no nó
-    printf("\nprimeiro\n");
-    no_isam->chaves[nul] = isam->tam_arq_dados + 1;
-    no_isam->filhos[nul] = isam->tam_arq_dados + 1;
-    isam_salvar_no_pos(isam, no_isam, posNo);  
     isam->tam_arq_dados++;
+    no_isam->chaves[nul] = isam->tam_arq_dados;
+    no_isam->filhos[nul] = isam->tam_arq_dados;
+    isam_salvar_no_pos(isam, no_isam, posNo);  
     isam->salvar_dado_pos(isam->arq_dados, dado, isam->tam_arq_dados);
-
-    impriFilho(no_isam);//##########
     } else if( (chav != -1) && (nul != -1) ){   // caso que tem uma chave maior e precisa deslocar as chaves existentes do nó
-            printf("\nsegundo\n");
 
         while(no_isam->chaves[chav] != NULL){
             int ind =0;
@@ -731,15 +727,15 @@ void isam_insere(T_ISAM *isam,void *dado){
             no_isam->filhos[ind] = NULL;
         }
     //salvando dados no arq
-    no_isam->chaves[chav] = isam->tam_arq_dados + 1;
-    no_isam->filhos[chav] = isam->tam_arq_dados + 1;
-    isam_salvar_no_pos(isam, no_isam, posNo);    //isam_pos_arq_ind(isam)
     isam->tam_arq_dados++;
+    no_isam->chaves[chav] = isam->tam_arq_dados;
+    no_isam->filhos[chav] = isam->tam_arq_dados;
+    isam_salvar_no_pos(isam, no_isam, posNo);    //isam_pos_arq_ind(isam)
     isam->salvar_dado_pos(isam->arq_dados, dado, isam->tam_arq_dados);
 
     } else if(nul == -1){   //caso de overflow
         printf("\n Terceiro \n");
-
+/*
         if(no_isam->filhos[no_isam->t] =! NULL){    // Se tiver nó de overflow; entrar no nó overflow e colocar o dado na primeira chave vazia
 
 
@@ -764,8 +760,10 @@ void isam_insere(T_ISAM *isam,void *dado){
         }else if(no_isam->filhos[no_isam->t] == NULL){  //se não tiver; criar nó de overflow e colocar o dado dentro desse nó
 
         }
+*/        
     }
     fflush(isam->arq_ind);
+    printf("\nDps de salvo:\n");
     impriFilho(no_isam);
  
     return 0;

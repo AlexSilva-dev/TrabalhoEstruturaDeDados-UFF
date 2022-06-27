@@ -1,0 +1,47 @@
+void isam_insere(T_ISAM *isam,void *dado){
+    TFunc *dIns = (TFunc *) dado;
+    FILE *arq_dados = isam->arq_dados;
+    int ant = func_tam_arq(arq_dados);
+    func_exportar_arq_texto(arq_dados, "Arq_test.txt");
+
+
+    TNo_ISAM * no_isam = isam_criar_no(isam,INTERNO);
+    isam_ler_no_pos(isam,no_isam, isam->raiz);
+    TIndiceReg pos = isam->raiz;
+
+    while (no_isam->tipo == INTERNO){
+
+        for (int i =0; i<isam->t-1; i++){
+            TFunc *dado = isam_ler_dado_chave_no_interno(isam, no_isam->chaves[i]);
+            if(dIns->cod <= dado->cod) {
+
+                pos = no_isam->filhos[i];
+                isam_ler_no_pos(isam, no_isam, no_isam->filhos[i]);
+                break;
+            }
+
+            if(dIns->cod>= dado->cod && i == isam->t-2){
+
+                isam_ler_no_pos(isam, no_isam, no_isam->filhos[i+1]);
+                break;
+
+            }
+        }
+    }
+
+    for (int i1 =0; i1<isam->t; i1++){
+
+        if (no_isam->filhos[i1] == -1){
+
+            no_isam->chaves[i1] = ant;
+            no_isam->filhos[i1] = ant;
+            
+            break;
+        }
+        
+    }
+
+    isam_salvar_no_pos(isam,no_isam, pos);
+
+    return 0;
+}
