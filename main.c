@@ -155,19 +155,19 @@ void insere_registro(T_ISAM * isam_cod,T_ISAM *isam_nome){
     printf("\nCodigo:");
     scanf("%d",&cod);
     printf("\nDigite o nome:");
-    scanf("%f",nome);
+    scanf("%s",nome);
     printf("\nSalario:");
     fflush(stdin);
-    scanf("%f",&salario);
+    scanf("%lf",&salario);
     printf("\n");
 
     func_set(func,cod,nome,salario);
     printf("Atualizando indices de codigos para insercao\n");
     isam_insere(isam_cod,func);
     printf("Atualizando indices de nomes para insercao\n");
-    isam_insere(isam_nome,func);
+    //isam_insere(isam_nome,func);
     printf("Salvando novo registro no arquivo de dados\n");
-    func_salvar_pos(isam_cod->arq_dados,func,isam_cod->tam_arq_dados);
+    //func_salvar_pos(isam_cod->arq_dados,func,isam_cod->tam_arq_dados);
     fflush(isam_nome->arq_dados);
     func_exportar_arq_texto(isam_cod->arq_dados,"funcionarios_cod.txt");
     func_exportar_arq_texto(isam_nome->arq_dados,"funcionarios_nome.txt");
@@ -549,7 +549,21 @@ int main(){
     isam_registra_callback_tam_arq_dados(isam_nome, func_tam_arq);
     isam_registra_callback_tam_reg_dados(isam_nome, func_tam_reg);
     isam_criar_paginas(isam_nome);
+    // Testes
+    TFunc *t1 = func_criar();
+    func_set(t1,1088, "alex", 1000);
+    isam_insere(isam_cod, t1);
 
+    fflush(isam_cod->arq_dados);
+    func_exportar_arq_texto(isam_cod->arq_dados,"funcionarios_cod.txt");
+    func_exportar_arq_texto(isam_nome->arq_dados,"funcionarios_nome.txt");
+    //fflush(isam_cod);
+
+    func_set(t1, 1088, "", 0);
+    printf("\n\n");
+    isam_buscar(isam_cod, t1);
+
+    //
     menu(isam_cod,isam_nome);
     
     //testes(isam_cod,isam_nome);        

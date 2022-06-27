@@ -154,6 +154,7 @@ void  isam_salvar_no(T_ISAM *isam, TNo_ISAM *no){
     fwrite(no->chaves,sizeof(long int),(isam->t-1),isam->arq_ind);
     fwrite(no->filhos,sizeof(long int),(isam->t),isam->arq_ind);
     fwrite(&no->prox,sizeof(long int),1,isam->arq_ind);
+    return 0;
 }
 
 //Salva um no pagina em disco na posicao dada por indice
@@ -564,6 +565,31 @@ TNo_ISAM *isam_buscar_no_folha(T_ISAM *isam, void *consulta){
 }
 
 
+void impriFilho(TNo_ISAM *no_isam){
+     //print ~~~
+
+        printf("|tipo:F|");
+        printf("|n=%d|",no_isam->n);
+            for (int i=0;i<no_isam->t-1;i++){
+                if (no_isam->chaves[i] != INFINITO){
+                    printf("|c_(%3d)=%3d|",i,no_isam->chaves[i]);
+                }
+                else{
+                    printf("|c_(%3d)=INF|",i);
+                }
+            } 
+            printf(" ");
+
+            for (int i=0;i<no_isam->t;i++){
+                printf("|f_(%3d)=%3d|",i,no_isam->filhos[i]);
+                
+            }
+            printf("|p=%d|",no_isam->prox);
+            printf("\n");
+        
+        //~~~~~~
+}
+
 //Busca pelo dado no arquivo de dados que satisfaz a consulta
 void* isam_buscar(T_ISAM *isam, void *consulta){
     TNo_ISAM* no_isam = isam_criar_no(isam,INTERNO);
@@ -639,16 +665,14 @@ void* isam_buscar(T_ISAM *isam, void *consulta){
 void isam_insere(T_ISAM *isam,void *dado){
 
 
-printf("koal");
     //busca para verificar se o dado já ta inserido
     if( (isam_buscar(isam, dado)) != NULL ){
-        printf("\ntenso");
         return NULL;
     }
+    int posNo;
     //percorer a arv nos nós interno como se fosse busca
     TNo_ISAM* no_isam = isam_criar_no(isam,INTERNO);
     isam_ler_no_pos(isam,no_isam,isam->raiz);
-    printf("\nola");
     while (no_isam->tipo==INTERNO){
         int u = 0;
         isam_ler_dado_chave_no_interno(isam,no_isam->chaves[u]);
@@ -657,37 +681,43 @@ printf("koal");
         }
         if ((u<no_isam->n) && (isam->comparar(dado,isam_ler_dado_chave_no_interno(isam,no_isam->chaves[u]))>=0)){   // ''
             isam_ler_no_pos(isam,no_isam,no_isam->filhos[u+1]);
+            posNo = no_isam->filhos[u+1];
         }
         else {
             isam_ler_no_pos(isam,no_isam,no_isam->filhos[u]);
+            posNo = no_isam->filhos[u];
         }
     }
-    printf("\n\nola1\n\n");
     
 
     //e quando chegar no nó filho andar pelas chaves verificando se a chave que vai inserir é menor q a chave do nó
-    int chav, nul = -1; 
+    int chav = -1;
+    int nul = -1; 
     for(int i = 0; i<no_isam->t-1; i++){
-        if( (isam->comparar(dado,isam_ler_dado_chave_no_interno(isam,no_isam->chaves[i]))>0) && (chav==-1) ){  // pode ser que a comparação do nó tem que ser < 0
+        if( (comparar_cod(dado,isam_ler_dado_chave_no_interno(isam,no_isam->chaves[i]))<0) && (chav==-1) ){  // pode ser que a comparação do nó tem que ser < 0
             chav = i;
         }
-        if(!no_isam->chaves[i]){
+        if(no_isam->chaves[i] == -1){
             nul = i;
         }
     }
-
-    printf("\nOla2\n"); //
+    printf("\n\n%d\n%d\n\n", chav, nul);
+    impriFilho(no_isam);
+    //impriFilho(no_isam); //##########
     //  se tiver uma chave no nó maior que a chave inserida; verifica se tem chave de valor nullo no nó, se não tiver; criar uma pag de overflow e insere....
     //  se tiver espaço só deslocar a chave do nó para o espaço seguinte
-    if( (chav == -1) && (nul != -1)){   // caso que não tem chave maior e tem espaço para colocar o dado no nó
 
+    if( (chav == -1) && (nul != -1)){   // caso que não tem chave maior e tem espaço para colocar o dado no nó
+    printf("\nprimeiro\n");
     no_isam->chaves[nul] = isam->tam_arq_dados + 1;
-    isam_salvar_no_pos(isam, no_isam, isam_pos_arq_ind(isam));  
+    no_isam->filhos[nul] = isam->tam_arq_dados + 1;
+    isam_salvar_no_pos(isam, no_isam, posNo);  
     isam->tam_arq_dados++;
     isam->salvar_dado_pos(isam->arq_dados, dado, isam->tam_arq_dados);
 
-
+    impriFilho(no_isam);//##########
     } else if( (chav != -1) && (nul != -1) ){   // caso que tem uma chave maior e precisa deslocar as chaves existentes do nó
+            printf("\nsegundo\n");
 
         while(no_isam->chaves[chav] != NULL){
             int ind =0;
@@ -695,15 +725,20 @@ printf("koal");
                 ind++;
             }
             no_isam->chaves[ind+1] = no_isam->chaves[ind];
+            no_isam->filhos[ind+1] = no_isam->filhos[ind];
+
             no_isam->chaves[ind] = NULL;
+            no_isam->filhos[ind] = NULL;
         }
     //salvando dados no arq
     no_isam->chaves[chav] = isam->tam_arq_dados + 1;
-    isam_salvar_no_pos(isam, no_isam, isam_pos_arq_ind(isam));
+    no_isam->filhos[chav] = isam->tam_arq_dados + 1;
+    isam_salvar_no_pos(isam, no_isam, posNo);    //isam_pos_arq_ind(isam)
     isam->tam_arq_dados++;
     isam->salvar_dado_pos(isam->arq_dados, dado, isam->tam_arq_dados);
 
     } else if(nul == -1){   //caso de overflow
+        printf("\n Terceiro \n");
 
         if(no_isam->filhos[no_isam->t] =! NULL){    // Se tiver nó de overflow; entrar no nó overflow e colocar o dado na primeira chave vazia
 
@@ -717,8 +752,10 @@ printf("koal");
                 }
                 //salvando dados no arq dados
                 no_isam->chaves[passaChav] = isam->tam_arq_dados + 1;
+                no_isam->filhos[passaChav] = isam->tam_arq_dados + 1;
                 isam_salvar_no_pos(isam, no_isam, isam_pos_arq_ind(isam));
                 isam->tam_arq_dados++;
+                //func_imprimir_arq_txt(isam->arq_dados, d);
                 isam->salvar_dado_pos(isam->arq_dados, dado, isam->tam_arq_dados);
 
             }
@@ -728,21 +765,10 @@ printf("koal");
 
         }
     }
-    printf("\nola3\n");
-
-  
-
-    //aloca a o indice da chave que vai inserir no indice da maior chave do nó 
-    //e coloca o filho corespondente com o indice do dado e adiciona o dado no arq_dados
-//testes para salvar o dado no arq de dados{
-    //TFunc *d = (TFunc*)malloc(sizeof(TFunc));
-    //d = (TFunc*)dado;
-    //func_salvar(isam->arq_dados, d);
-    //func_salvar_pos(isam->arq_dados, d, isam->tam_arq_dados);
-    //fflush(isam->arq_dados);
-//}
-    
-
+    fflush(isam->arq_ind);
+    impriFilho(no_isam);
+ 
+    return 0;
 
 }
 

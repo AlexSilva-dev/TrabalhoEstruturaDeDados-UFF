@@ -48,5 +48,3 @@
  1559                                        Xavier Ruiz 20000.00f
  3096                                 Zelia Rios Zanatta 15000.00f
  3327                                  Zorba Garcia Ruiz  7000.00f
- 1088                                                        0.00f
- 1089                                                       0.00f
