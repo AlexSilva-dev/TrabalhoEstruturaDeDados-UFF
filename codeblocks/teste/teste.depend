@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1650824390 source:/home/alex/MeusCodigos/C/TrabalhoSO/codeblocks/teste/main.cpp
+	<stdio.h>
+	<stdlib.h>
+	<unistd.h>
+	<threads.h>
+	<string.h>
+
